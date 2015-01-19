@@ -1,0 +1,18 @@
+<template name="artboard">
+   {{> canvas}}
+   {{> control}}
+</template>	
+
+<template name="canvas">
+	<div class="my-svg-container">
+		<svg class="my-svg" preserveAspectRatio= "xMinYMin meet" viewBox="0 0 560 500"></svg>
+	</div>	
+	
+</template>	
+<template name="control">
+	<div class="control">
+		<canvas id="myCanvas" style="display:none;"></canvas>
+		<button class="btn-primary btn-lg" id='clear' type="button">Clear Board</button>
+		<button class="btn-lg btn-success" id='download' type="button">Download</button>
+	</div>	
+</template>
