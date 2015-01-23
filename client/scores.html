@@ -1,0 +1,15 @@
+<template name="scores">
+	<div class="container">
+		<h1>Gallery</h1>
+			{{#each pieces}}
+			<div class="col-lg-4 col-sm-6 col-xs-12">
+					<img class="img-responsive" src="{{img}}">
+				<div class="text">
+					<h1>Score : {{orig}}</h1><br>
+					Created by : <ol>{{#each users}}<li>{{username}}</li>{{/each}}
+						</ol>
+				</div>
+				</div>
+				{{/each}}
+		</div>
+	</template>

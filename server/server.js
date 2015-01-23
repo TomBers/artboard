@@ -15,12 +15,13 @@ Meteor.methods({
 		min = max - Math.floor(max*0.2);
 		return Math.floor(Math.random()*(max-min+1)+min);
 	},
-	saveImage : function(img,urs){
+	saveImage : function(img,urs,orig){
 		Pieces.insert({
 		createdBy: Meteor.userId(),
 		  createdAt: new Date(),
 		  img: img,
-		  users: urs
+		  users: urs,
+		  orig: orig
 		});
 	}
 });

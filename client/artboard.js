@@ -6,7 +6,6 @@ var scale = 90;
 var r = 45;
 var clicks = 0;
 Session.set('col', '#0DE4EF');
-
 Accounts.ui.config({
   passwordSignupFields: "USERNAME_ONLY"
 });
@@ -19,9 +18,9 @@ if (Meteor.isClient) {
 	canvas = null;
 	ctx    = null;
 	Meteor.startup(function(){	
-		Meteor.call('getOrigScore',clicks, function(err,data){
-			Session.set('score',data);
-		});
+		// Meteor.call('getOrigScore',clicks, function(err,data){
+			Session.set('score',0);
+		// });
 		
 		
 			});
@@ -35,14 +34,12 @@ if (Meteor.isClient) {
 		Template.control.helpers({
 			score : function(){
 				return Session.get('score');
+				},
+				online : function(){
+					return Meteor.users.find({ "status.online": true });	
 				}
 		});
 		
-		Template.allUsers.helpers({
-			online : function(){
-				return Meteor.users.find({ "status.online": true });	
-			}
-		});
 
 		Template.canvas.rendered = function(){
 
@@ -202,7 +199,7 @@ if (Meteor.isClient) {
 
 				  var canvasdata = canvas.toDataURL("image/png");
 				 var contributors = Meteor.users.find({ "status.online": true }).fetch();	
-				  Meteor.call('saveImage',canvasdata,contributors, function(err,data){
+				  Meteor.call('saveImage',canvasdata,contributors,Session.get('score'), function(err,data){
 					alert('Image Saved in Gallery');
 					location.reload();
 					});
