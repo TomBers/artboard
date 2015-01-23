@@ -1,6 +1,7 @@
 <template name="artboard">
    {{> canvas}}
    {{> control}}
+   
 </template>	
 
 <template name="canvas">
@@ -10,9 +11,23 @@
 	
 </template>	
 <template name="control">
-	<div class="control">
+	{{> allUsers}}
+<div class="control">
+	<h2>Hi <strong>{{currentUser.username}}</strong> your originality : {{score}}%</h2>
 		<canvas id="myCanvas" style="display:none;"></canvas>
 		<button class="btn-primary btn-lg" id='clear' type="button">Clear Board</button>
 		<button class="btn-lg btn-success" id='download' type="button">Download</button>
+		<button class="btn-lg btn-success" id='save' type="button">Save to Gallery</button>
 	</div>	
 </template>
+
+<template name="allUsers">
+	<div class="allUsers">
+		<p>Users online : </p>
+		<ul>
+	{{#each online}}
+	<li>{{username}}</li>
+	{{/each}}
+	</ul>
+	</div>
+</template>	

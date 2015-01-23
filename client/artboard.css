@@ -9,6 +9,23 @@ ul{
 	max-width:960px;
 	
 }
+#signin{
+	min-width:250px;
+}
+.allUsers{
+	display:inline;
+	float:left;
+}
+.control{
+	display:inline-block;
+}
+ul{
+	color:#32cd32;
+}
+.preview{
+	max-width:150px;
+	max-height:150px;
+}
 /* CSS declarations go here */
 .my-svg-container{
 	

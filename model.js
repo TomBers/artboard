@@ -1,1 +1,2 @@
-Items = new Mongo.Collection("Items");
+Items = new Mongo.Collection("items");
+Pieces = new Mongo.Collection("pieces");

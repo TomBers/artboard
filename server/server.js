@@ -9,5 +9,18 @@ Meteor.methods({
 				Items.update({x:x,y:y},{x:x,y:y,colour:'#ffffff'},{upsert:true});
 			}
 		}
+	},
+	getOrigScore: function(c) {
+		max = Math.min((2*c + 10),100);
+		min = max - Math.floor(max*0.2);
+		return Math.floor(Math.random()*(max-min+1)+min);
+	},
+	saveImage : function(img,urs){
+		Pieces.insert({
+		createdBy: Meteor.userId(),
+		  createdAt: new Date(),
+		  img: img,
+		  users: urs
+		});
 	}
 });
