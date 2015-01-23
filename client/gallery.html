@@ -1,9 +1,15 @@
 <template name="gallery">
-<h1>Gallery</h1>
-{{#each pieces}}
-<img class="preview" src="{{img}}">
-<p>{{createdAt}}</p>
-Created by : <ol>{{#each users}}<li>{{username}}</li>{{/each}}</ol>
-{{/each}}
-
-</template>
+	<div class="container">
+		<h1>Gallery</h1>
+			{{#each pieces}}
+			<div class="col-lg-4 col-sm-6 col-xs-12">
+					<img class="img-responsive" src="{{img}}">
+				<div class="text">
+					Created by : <ol>{{#each users}}<li>{{username}}</li>{{/each}}
+						</ol>
+					<p class='date'>{{createdAt}}</p>
+				</div>
+				</div>
+				{{/each}}
+		</div>
+	</template>

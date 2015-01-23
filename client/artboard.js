@@ -204,6 +204,7 @@ if (Meteor.isClient) {
 				 var contributors = Meteor.users.find({ "status.online": true }).fetch();	
 				  Meteor.call('saveImage',canvasdata,contributors, function(err,data){
 					alert('Image Saved in Gallery');
+					location.reload();
 					});
 				  
 			  };
