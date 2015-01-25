@@ -1,12 +1,16 @@
 Meteor.methods({
 	changeColour: function(x,y,col) {
 
-		Items.update({x:x,y:y},{x:x,y:y,colour:col},{upsert:true});
+		Items.update({x:x,y:y},{x:x,y:y,colour:col,endAngle:0},{upsert:true});
+	},
+	changeColourandAngel: function(x,y,col,ang) {
+
+		Items.update({x:x,y:y},{x:x,y:y,colour:col,endAngle:ang},{upsert:true});
 	},
 	clear: function() {
 		for(var x=0; x<9 ; x++){
 			for(var y=0;y<5;y++){
-				Items.update({x:x,y:y},{x:x,y:y,colour:'#ffffff'},{upsert:true});
+				Items.update({x:x,y:y},{x:x,y:y,colour:'#ffffff',endAngle:0},{upsert:true});
 			}
 		}
 	},

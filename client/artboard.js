@@ -95,6 +95,7 @@ if (Meteor.isClient) {
 						.attr("width", 40)
 						.attr("height", 15)
 						.attr("fill",col)
+						.attr("class", 'col')
 						.attr("stroke",'#000000')
 						.attr("stroke-width", 0)
 						.on('mouseover',function(){
@@ -127,14 +128,13 @@ if (Meteor.isClient) {
 	}
 
 	Template.control.events({
-		'click #user' :function(){
-		console.log(Meteor.user());
-		},
 		'click #clear' :function(){
 			d3.selectAll('circle').attr("fill",'#ffffff');
+			d3.selectAll('.rectshape').attr("fill",'#ffffff');
 			Meteor.call('clear');
 			Session.set('score',0);
 			clicks = 0;
+			location.reload();
 		},
 			'click #download' :function(){
 				
@@ -175,7 +175,7 @@ if (Meteor.isClient) {
 			},
 			'click #save' :function(){
 				
-				d3.selectAll('rect').remove();
+				d3.selectAll('.col').remove();
 				
 				var html = d3.select("svg")
 			        .node().parentNode.innerHTML;
