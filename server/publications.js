@@ -9,3 +9,7 @@ Meteor.publish("userStatus", function() {
 Meteor.publish("pieces", function() {
   return Pieces.find();
 });
+
+Meteor.publish("comments", function() {
+  return Comments.find();
+});

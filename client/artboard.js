@@ -17,7 +17,7 @@ var a2 =  Math.PI;
 var a3 = 3*(2*Math.PI)/4;
 var a4 = 2*Math.PI;
 var possA = [a1,a2,a3,a4];
-var angls = [[0,a1],
+var angls = [[0,a4],[0,a4],
 [0,a1],[0,a2],[0,a3],[0,a4],
 [a1,a2],[a1,a3],[a1,a4],[0,a4],
 [a2,a3],[a2,a4],[a2,a1+a4],[0,a4],
@@ -43,55 +43,48 @@ var angls = [[0,a1],
 
 		canvas = null;
 		ctx    = null;
-		Meteor.startup(function(){	
+		Meteor.startup(function(){
 				Session.set('score',0);
 				// console.log(Router.current().path(this));
-			
+
 			});
 
 			Template.canvas.helpers({
 				getDat: function () {
 					return Items.find({},{sort: {x: 1,y:1}});
-				}	
-			});
-
-			Template.control.helpers({
-				score : function(){
-					return Session.get('score');
-				},
-				online : function(){
-					return Meteor.users.find({ "status.online": true });	
 				}
 			});
 
+		
 
 			Template.canvas.rendered = function(){
-			
+
 				var self = this;
 				self.node = self.find("svg");
 				d3.select(self.node).attr({ version: '1.1' , xmlns:"http://www.w3.org/2000/svg"});
-				var height = 500; 
+				var height = 590;
 				if (! self.handle) {
 					self.handle = Deps.autorun(function () {
 						clearScreen(self.node);
-						
+
 						var itms = Items.find().fetch();
 						switch (Router.current().route.getName()) {
-							case "squares": 
+							case "squares":
 							drawSquares(self.node,itms,height);
 							break;
-							case "circles": 
+							case "circles":
 							drawCicles(self.node,itms,height);
 							break;
-							case "arcs": 
+							case "arcs":
 							drawArcs(self.node,itms,height);
 							break;
-							default: 	console.log('Non selected'); 	
-							
+							case "connect":
+							drawCicles(self.node,itms,height,true);
+							break;
 						}
 						// drawCicles(self.node,itms,height);
 						// drawSquares(self.node,itms,height);
-						
+
 						colSelTool(self.node);
 
 					});
@@ -108,9 +101,10 @@ var angls = [[0,a1],
 			.attr("width",  2000)
 			.attr("height", 2000)
 			.attr("fill", '#ffffff');
-			
+
 		}
-		function drawCicles(node,itms,height){
+		function drawCicles(node,itms,height,connect){
+			if(typeof connect === "undefined") {connect = false;}
 			itms.forEach(function(item){
 
 				var cx = (item.x * scale) + r;
@@ -122,22 +116,36 @@ var angls = [[0,a1],
 					.attr("cy",cy)
 					.attr("r", r)
 					.attr("fill",item.colour)
-					.attr("stroke",'#ffffff')
-					.attr("stroke-width", 2)
+					.attr("stroke-width", 0)
 					.on('mouseover',function(){
 						d3.select(this)
 						.attr("stroke",'#000000')
-						.attr("r",(r-2));
+						.attr("stroke-width", 4)
+						.attr("r",(r-4));
 					})
 					.on('mouseout',function(){
 						d3.select(this)
 						.attr("stroke",'#ffffff')
+						.attr("stroke-width", 0)
 						.attr("r",r);
 					})
 					.on('click',function(){
 						if(d3.select(this).attr("fill") != Session.get('col') ){
-							d3.select(this).attr("fill",Session.get('col'));
-							Meteor.call('changeColour',item.x,item.y,Session.get('col'));
+
+							if(connect){
+								// console.log(item);
+								var mx = -1;
+								itms.filter(function(spot) {return spot.x == item.x && spot.colour != '#ffffff';}).forEach(function(dot){
+									console.log(dot);
+									if(dot.y > mx){mx=dot.y;}
+								});
+								mx++;
+								Meteor.call('changeColour',item.x,mx,Session.get('col'));
+							}else{
+								d3.select(this).attr("fill",Session.get('col'));
+								Meteor.call('changeColour',item.x,item.y,Session.get('col'));
+							}
+
 
 							Meteor.call('getOrigScore',clicks++, function(err,data){
 								Session.set('score',data);
@@ -146,7 +154,7 @@ var angls = [[0,a1],
 
 
 
-					})	
+					})
 				}
 
 
@@ -157,14 +165,14 @@ var angls = [[0,a1],
 			itms.forEach(function(item){
 				var cx = (item.x * sqr) + (item.x * 10) + 2;
 				var cy = (item.y * sqr) + sqr + (item.y * 10);
-				if(!isNaN(cx) && !isNaN(cy)){						
+				if(!isNaN(cx) && !isNaN(cy)){
 					d3.select(node).append("svg:rect")
 					.attr("x", cx)
 					.attr("y",cy)
-					.attr("width",  sqr)
-					.attr("height", sqr)
+					.attr("width",  sqr+5)
+					.attr("height", sqr+5)
 					.attr("stroke", '#ffffff')
-					.attr("stroke-width", 2)
+					.attr("stroke-width", 0)
 					.attr("class",'rectshape')
 					.attr("fill",item.colour)
 					.on('mouseover',function(){
@@ -205,10 +213,10 @@ var angls = [[0,a1],
 				var arc = d3.svg.arc()
 				.innerRadius(r-30)
 				.outerRadius(r)
-				.startAngle(angls[item.endAngle][0]) //converting from degs to radians
+				.startAngle(angls[item.endAngle][0])
 				.endAngle(angls[item.endAngle][1]);
 
-				if(!isNaN(cx) && !isNaN(cy)){	
+				if(!isNaN(cx) && !isNaN(cy)){
 					d3.select(node).append("svg:circle")
 					.attr("cx", cx)
 					.attr("cy",cy)
@@ -238,27 +246,19 @@ var angls = [[0,a1],
 					.on('click',function(){
 
 						var eAng = item.endAngle;
-						if(item.endAngle > 15){
-							eAng = 0;
-							d3.select(self.node).append("svg:circle")
-							.attr("cx", cx)
-							.attr("cy",cy)
-							.attr("r", r)
-							.attr("fill",'#ffffff');
-						}
-						else{
-							eAng++;
-						}
+						if(item.endAngle > 16){eAng = 0;}
+						else{eAng++;}
+
 
 
 						d3.select(this).attr("fill",Session.get('col'));
-						Meteor.call('changeColourandAngel',item.x,item.y,Session.get('col'),eAng);
+						Meteor.call('changeColour',item.x,item.y,Session.get('col'),eAng);
 						// if(d3.select(this).attr("fill") != Session.get('col') ){
 							Meteor.call('getOrigScore',clicks++, function(err,data){
 								Session.set('score',data);
 							});
 
-						})	
+						})
 						ct++;
 					}
 				})
@@ -269,19 +269,21 @@ var angls = [[0,a1],
 				var cnt = 0;
 				cols.forEach(function(col){
 					d3.select(node).append("svg:rect")
-					.attr("x", ((50*cnt)+25))
+					.attr("x", ((50*cnt) + (12 * cnt)))
 					.attr("y", 0)
-					.attr("width", 40)
+					.attr("width", 50)
 					.attr("height", 15)
 					.attr("fill",col)
 					.attr("class", 'col')
 					.attr("stroke",'#000000')
 					.attr("stroke-width", 0)
 					.on('mouseover',function(){
+						if(d3.select(this).attr("fill") != Session.get('col')){
 						d3.select(this).transition()
 						.attr("height",45)
 						.duration(750)
 						.each("end", function() { d3.select(this).transition().attr("height",10).duration(750); });
+					}
 					})
 					.on('mouseout',function(){
 						if(d3.select(this).attr("fill") != Session.get('col')){
@@ -300,7 +302,3 @@ var angls = [[0,a1],
 					if(tcol == Session.get('col')){d3.select(this).attr("height",45);}
 				});
 			}
-
-
-
-

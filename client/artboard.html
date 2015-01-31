@@ -3,14 +3,14 @@
    {{> canvas}}
    {{> control}}
    </div>
-</template>	
+</template>
 
 <template name="canvas">
 	<div class="my-svg-container">
-		<svg class="my-svg" preserveAspectRatio= "xMinYMin meet" viewBox="0 0 560 500"></svg>
-	</div>	
-	
-</template>	
+		<svg class="my-svg" preserveAspectRatio= "none" viewBox="0 0 810 600"></svg>
+	</div>
+
+</template>
 <template name="control">
 
 <div class="row">
@@ -22,13 +22,18 @@
 		{{/each}}
 		</ul>
 	</div>
-	<div class='col-md-5 col-xs-12'>
+	<div class='col-md-7 col-xs-12'>
 	<h2>Originality of piece : {{score}}%</h2>
 		<canvas id="myCanvas" style="display:none;"></canvas>
 		<button class="btn-lg btn-success" id='download' type="button">Download</button>
 		<button class="btn-lg btn-info" id='save' type="button">Save to Gallery</button>
 		<button class="btn-warning btn-lg" id='clear' type="button">Reset</button>
+		<input type="text" name="chatTxt" id='chatTxt'><button class="btn" id='chat' type="button">Chat</button>
 		</div>
-	</div>	
+		<div class='col-md-12 col-xs-12' id="comments">
+		{{#each comments}}
+		<p><strong>{{usr}}</strong> : {{comm}}</p>
+		{{/each}}
+	</div>
+	</div>
 </template>
-

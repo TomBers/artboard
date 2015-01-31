@@ -7,7 +7,12 @@ ul{
 #txtbdy{
 	margin:0 auto;
 	max-width:960px;
-	
+
+}
+#comments{
+	/*border:1px solid red;*/
+	max-height:250px;
+	overflow: hidden;
 }
 #signin{
 	min-width:250px;
@@ -33,11 +38,11 @@ overflow: hidden;
 }
 /* CSS declarations go here */
 .my-svg-container{
-	
+ /*border:1px solid red;*/
  display: block;
  position: relative;
  width: 90%;
- padding-bottom: 55%; 
+ padding-bottom: 60%;
 /* depends on svg ratio, for my zebra height/width = 1.2 so padding-bottom = 50% * 1.2 = 60% */
  margin:0 auto;
 text-align:center;
@@ -59,7 +64,7 @@ margin-top:30px;
 	display:block;
 	margin:0 auto;
 	text-align:center;
-	
+
 }
 .navbar{
 	margin-bottom: 0px;
