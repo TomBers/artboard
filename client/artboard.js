@@ -55,7 +55,7 @@ var angls = [[0,a4],[0,a4],
 				}
 			});
 
-		
+
 
 			Template.canvas.rendered = function(){
 
@@ -136,11 +136,13 @@ var angls = [[0,a4],[0,a4],
 								// console.log(item);
 								var mx = -1;
 								itms.filter(function(spot) {return spot.x == item.x && spot.colour != '#ffffff';}).forEach(function(dot){
-									console.log(dot);
+
 									if(dot.y > mx){mx=dot.y;}
 								});
 								mx++;
+								if(mx < 6){
 								Meteor.call('changeColour',item.x,mx,Session.get('col'));
+							}
 							}else{
 								d3.select(this).attr("fill",Session.get('col'));
 								Meteor.call('changeColour',item.x,item.y,Session.get('col'));
