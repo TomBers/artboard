@@ -22,8 +22,9 @@ Template.control.helpers({
 Template.control.events({
 	'click #chat' :function(){
 		var usr = 'Anon';
+		// console.log(Meteor.user());
 		try{
-		 usr = Meteor.user().username;
+		 usr = Meteor.user().username || Meteor.user().profile.name;
 	}catch(e){
 
 	}

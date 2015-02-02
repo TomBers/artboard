@@ -5,7 +5,7 @@ Meteor.methods({
 	},
 	comment: function(comm,usr) {
 		if(typeof comm === "undefined") {comm = '';}
-		if(typeof usr === "undefined" || usr == null) {comm = 'Anon';}
+		if(typeof usr === "undefined" || usr == null) {usr = 'Anon';}
 		Comments.insert({usr:usr,comm:comm,createdAt: new Date()});
 	},
 
